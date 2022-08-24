@@ -1,39 +1,27 @@
-//pacote que contém os componentes do layout do formulário
 import 'package:flutter/material.dart';
 
-//método principal da classe
 void main() => runApp(
-      //MaterialApp->utiliza as partes gráficas
-      //para elaboração dos layouts
+      
       MaterialApp(
-        //primeiramente executa a classe Home
         home: Home(),
-        //utiliza um pequeno banner no aplicativo
         debugShowCheckedModeBanner: false,
       ),
     );
 
-//início
+
 class Home extends StatefulWidget {
   @override
   HomeState createState() => HomeState();
 }
 
 class HomeState extends State<Home> {
-  //para poder utilizar as ações dos botões de acordo
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  //criando os campos de entrada de dados
   final TextEditingController _chuvaPol = TextEditingController();
 
-  //contém valor do resultado final
   String _result = "";
-  //método para zerar todos os campos quando o aplicativo
-  //for aberto
   @override
   void initState() {
-    //iniciando o estado do aplicativo ao ser executado
     super.initState();
-    //chamando o método para limpar os dados informados
     limpaCampos();
   }
 
@@ -52,7 +40,6 @@ class HomeState extends State<Home> {
     });
   }
 
-  //criando o botão para calcular o Valor a Pagar
   Widget buildCalcularButton() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 36.0),
