@@ -16,7 +16,7 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _chuvaPol = TextEditingController();
+  final TextEditingController _salarioBruto = TextEditingController();
 
   String _result = "";
   @override
@@ -26,17 +26,17 @@ class HomeState extends State<Home> {
   }
 
   void limpaCampos() {
-    _chuvaPol.text = '';
+    _salarioBruto.text = '';
     setState(() {
       _result = '';
     });
   }
 
-  void calcularValorEmMilimetros() {
-    final double valorEmMilimetros = (double.parse(_chuvaPol.text) * 25.4);
+  void calcularSalarioLiquido() {
+    final double salarioLiquido = (double.parse(_salarioBruto.text) - (double.parse(_salarioBruto.text)*0.15));
     setState(() {
       _result =
-          "Valor em milímetros = ${valorEmMilimetros.toStringAsFixed(2)}\n";
+          "Salário Líquido = ${salarioLiquido.toStringAsFixed(2)}\n";
     });
   }
 
@@ -46,10 +46,10 @@ class HomeState extends State<Home> {
       child: RaisedButton(
         onPressed: () {
           if (_formKey.currentState != null) {
-            calcularValorEmMilimetros();
+            calcularSalarioLiquido();
           }
         },
-        child: Text('Valor em polegadas', style: TextStyle(color: Colors.red)),
+        child: Text('Calcular Valor líquido', style: TextStyle(color: Colors.red)),
       ),
     );
   }
@@ -76,7 +76,7 @@ class HomeState extends State<Home> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Text('Conversor de Polegadas'),
+      title: Text('Calculadora de Salário'),
       backgroundColor: Colors.blue,
       actions: <Widget>[
         IconButton(
@@ -96,9 +96,9 @@ class HomeState extends State<Home> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           buildTextFormField(
-              label: "Valor em Polegadas",
-              error: "Informe um valor em polegadas!",
-              controller: _chuvaPol),
+              label: "Salário bruto",
+              error: "Informe o valor do salário bruto!",
+              controller: _salarioBruto),
           buildTextResult(),
           buildCalcularButton(),
         ],
