@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:extended_math/extended_math.dart';
+import 'package:dart_math/algebra.dart';
 
 void main() => runApp(
-      
       MaterialApp(
         home: Home(),
         debugShowCheckedModeBanner: false,
       ),
     );
-
 
 class Home extends StatefulWidget {
   @override
@@ -38,10 +36,12 @@ class HomeState extends State<Home> {
   }
 
   void calcularSalarioLiquido() {
-    final int raizes = QuadraticEquation(int.parse(_a.text),int.parse(_b.text),int.parse(_c))
+    final a = double.parse(_a.text);
+    final b = double.parse(_b.text);
+    final c = double.parse(_c.text);
+    final raizes = Quadratic(a, b, c);
     setState(() {
-      _result =
-          "Raizes = ${raizes.toStringAsFixed}\n";
+      _result = "Delta = ${raizes.discriminant()}\n Raízes: ${raizes.roots()}";
     });
   }
 
@@ -54,7 +54,7 @@ class HomeState extends State<Home> {
             calcularSalarioLiquido();
           }
         },
-        child: Text('Calcular Valor líquido', style: TextStyle(color: Colors.red)),
+        child: Text('Calcular Equação', style: TextStyle(color: Colors.red)),
       ),
     );
   }
@@ -81,7 +81,7 @@ class HomeState extends State<Home> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Text('Calculadora de Salário'),
+      title: Text('Calculadora de Equação'),
       backgroundColor: Colors.blue,
       actions: <Widget>[
         IconButton(
@@ -100,18 +100,9 @@ class HomeState extends State<Home> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          buildTextFormField(
-              label: "A²",
-              error: "Informe A²!",
-              controller: _a),
-              buildTextFormField(
-              label: "B",
-              error: "Informe o B!",
-              controller: _b),
-              buildTextFormField(
-              label: "C",
-              error: "Informe o C!",
-              controller: _c),
+          buildTextFormField(label: "A²", error: "Informe A²!", controller: _a),
+          buildTextFormField(label: "B", error: "Informe o B!", controller: _b),
+          buildTextFormField(label: "C", error: "Informe o C!", controller: _c),
           buildTextResult(),
           buildCalcularButton(),
         ],
