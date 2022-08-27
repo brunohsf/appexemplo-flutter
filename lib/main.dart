@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:extended_math/extended_math.dart';
 
 void main() => runApp(
       
@@ -16,7 +17,9 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _salarioBruto = TextEditingController();
+  final TextEditingController _a = TextEditingController();
+  final TextEditingController _b = TextEditingController();
+  final TextEditingController _c = TextEditingController();
 
   String _result = "";
   @override
@@ -26,17 +29,19 @@ class HomeState extends State<Home> {
   }
 
   void limpaCampos() {
-    _salarioBruto.text = '';
+    _a.text = '';
+    _b.text = '';
+    _c.text = '';
     setState(() {
       _result = '';
     });
   }
 
   void calcularSalarioLiquido() {
-    final double salarioLiquido = (double.parse(_salarioBruto.text) - (double.parse(_salarioBruto.text)*0.15));
+    final int raizes = QuadraticEquation(int.parse(_a.text),int.parse(_b.text),int.parse(_c))
     setState(() {
       _result =
-          "Salário Líquido = ${salarioLiquido.toStringAsFixed(2)}\n";
+          "Raizes = ${raizes.toStringAsFixed}\n";
     });
   }
 
@@ -96,9 +101,17 @@ class HomeState extends State<Home> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           buildTextFormField(
-              label: "Salário bruto",
-              error: "Informe o valor do salário bruto!",
-              controller: _salarioBruto),
+              label: "A²",
+              error: "Informe A²!",
+              controller: _a),
+              buildTextFormField(
+              label: "B",
+              error: "Informe o B!",
+              controller: _b),
+              buildTextFormField(
+              label: "C",
+              error: "Informe o C!",
+              controller: _c),
           buildTextResult(),
           buildCalcularButton(),
         ],
