@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:dart_math/algebra.dart';
 
 void main() => runApp(
       MaterialApp(
@@ -15,34 +14,81 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _a = TextEditingController();
-  final TextEditingController _b = TextEditingController();
-  final TextEditingController _c = TextEditingController();
+
+  final TextEditingController _nome = TextEditingController();
+
+  final TextEditingController _sexo = TextEditingController();
+
+  final TextEditingController _altura = TextEditingController();
+
+  final TextEditingController _peso = TextEditingController();
 
   String _result = "";
+
   @override
   void initState() {
     super.initState();
+
     limpaCampos();
   }
 
   void limpaCampos() {
-    _a.text = '';
-    _b.text = '';
-    _c.text = '';
+    _nome.text = '';
+
+    _sexo.text = '';
+
+    _altura.text = '';
+
+    _peso.text = '';
+
     setState(() {
       _result = '';
     });
   }
 
-  void calcularSalarioLiquido() {
-    final a = double.parse(_a.text);
-    final b = double.parse(_b.text);
-    final c = double.parse(_c.text);
-    final raizes = Quadratic(a, b, c);
-    setState(() {
-      _result = "Delta = ${raizes.discriminant()}\n Raízes: ${raizes.roots()}";
-    });
+  void calcularImc() {
+    final num peso = num.parse(_peso.text);
+
+    final num altura = num.parse(_altura.text);
+
+    final num imc = (peso / (altura * altura));
+
+    if (imc < 18.5) {
+      setState(() {
+        _result =
+            "IMC=${imc.toStringAsFixed(1)}\n\n Você está abaixo do IMC, classificado como 'Muito magro'";
+      });
+    }
+    if (imc > 18.5 && imc < 24.9) {
+      setState(() {
+        _result =
+            "IMC=${imc.toStringAsFixed(1)}\n\n IMC normal, classificado como 'Normal'";
+      });
+    }
+    if (imc > 25 && imc < 29.9) {
+      setState(() {
+        _result =
+            "IMC=${imc.toStringAsFixed(1)}\n\n Você está acima do IMC, classificado como 'Sobrepeso'";
+      });
+    }
+    if (imc > 30 && imc < 34.9) {
+      setState(() {
+        _result =
+            "IMC=${imc.toStringAsFixed(1)}\n\n Você está bem acima do IMC, classificado como 'Obeso grau I'";
+      });
+    }
+    if (imc > 35 && imc < 39.9) {
+      setState(() {
+        _result =
+            "IMC=${imc.toStringAsFixed(1)}\n\n Você está muito do IMC, classificado como 'Obeso grau II'";
+      });
+    }
+    if (imc > 40) {
+      setState(() {
+        _result =
+            "IMC=${imc.toStringAsFixed(1)}\n\n Você está extremamente acima do IMC, classificado como 'Obeso grau III ou Mórbido'";
+      });
+    }
   }
 
   Widget buildCalcularButton() {
@@ -51,15 +97,15 @@ class HomeState extends State<Home> {
       child: RaisedButton(
         onPressed: () {
           if (_formKey.currentState != null) {
-            calcularSalarioLiquido();
+            calcularImc();
           }
         },
-        child: Text('Calcular Equação', style: TextStyle(color: Colors.red)),
+        child: Text('Calcular',
+            style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
       ),
     );
   }
 
-  //método para configurar o resultado em uma Text
   Widget buildTextResult() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 36.0),
@@ -74,18 +120,18 @@ class HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: buildAppBar(),
-        backgroundColor: Colors.blue[100],
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
         body: SingleChildScrollView(
             padding: EdgeInsets.all(20.0), child: buildForm()));
   }
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Text('Calculadora de Equação'),
-      backgroundColor: Colors.blue,
+      title: Text('Calculadora de IMC'),
+      backgroundColor: Color.fromARGB(255, 248, 246, 117),
       actions: <Widget>[
         IconButton(
-          icon: Icon(Icons.clear),
+          icon: Icon(Icons.calculate_outlined),
           onPressed: () {
             limpaCampos();
           },
@@ -100,9 +146,16 @@ class HomeState extends State<Home> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          buildTextFormField(label: "A²", error: "Informe A²!", controller: _a),
-          buildTextFormField(label: "B", error: "Informe o B!", controller: _b),
-          buildTextFormField(label: "C", error: "Informe o C!", controller: _c),
+          buildTextFormField(
+              label: "Nome", error: "Insira o seu nome.", controller: _nome),
+          buildTextFormField(
+              label: "Sexo", error: "Insira o seu sexo.", controller: _sexo),
+          buildTextFormField(
+              label: "Altura",
+              error: "Insira a sua altura.",
+              controller: _altura),
+          buildTextFormField(
+              label: "Peso", error: "Insira o seu peso.", controller: _peso),
           buildTextResult(),
           buildCalcularButton(),
         ],
@@ -110,8 +163,6 @@ class HomeState extends State<Home> {
     );
   }
 
-  //formatar e exibir msg de erro nos inputs (entrada
-  //de dados)
   TextFormField buildTextFormField(
       {required TextEditingController controller,
       required String error,
@@ -122,6 +173,7 @@ class HomeState extends State<Home> {
       controller: controller,
       validator: (text) {
         //verifica se o valor foi digitado
+
         return text!.isEmpty ? error : null;
       },
     );
